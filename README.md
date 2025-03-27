@@ -4,6 +4,7 @@ Spring Boot 기반으로 JWT(Json Web Token)를 이용한 인증 시스템 구�
 
 ---
 ## 파일 구조
+```
 src
 ├── config
 │   ├── SecurityConfig.java            # Spring Security 설정
@@ -25,6 +26,7 @@ src
         ├── UserService.java
         ├── UserServiceImpl.java
         └── UserVO.java
+```
 ---
 
 ## 실행 방법
