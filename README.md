@@ -5,7 +5,6 @@ Spring Boot 기반으로 JWT(Json Web Token)를 이용한 인증 시스템 구�
 ---
 ## 파일 구조
 
-<pre lang="no-highlight"><code>
 ```
 src
 ├── config
@@ -29,7 +28,6 @@ src
         ├── UserServiceImpl.java
         └── UserVO.java
 ```
-</code></pre>
 ---
 
 ## 실행 방법
@@ -38,7 +36,8 @@ src
 ./gradlew bootRun
 ```
 
-## application.yml 안에 JWT에 사용할 secret 키 작성
-
+## application.yml 안에 JWT에 사용할 secret key 작성
+```
 jwt:
-  secret:
+  secret: {secret key}
+```
