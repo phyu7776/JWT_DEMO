@@ -2,6 +2,8 @@
 
 Spring Boot 기반으로 JWT(Json Web Token)를 이용한 인증 시스템 구현 예제입니다.  
 
+📌 [API 명세 보기](./docs/api-spec.md)
+
 ---
 ## 라이브러리
 JWT, JPA, Lombok
@@ -65,5 +67,3 @@ spring:
 jwt:
   secret: {secret key}
 ```
-
-📌 [API 명세 보기](./docs/api-spec.md)
