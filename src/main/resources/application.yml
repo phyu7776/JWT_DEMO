@@ -1,2 +1,22 @@
 jwt:
   secret:
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:jwtDB
+    driver-class-name: org.h2.Driver
+    username: phyu
+    password:
+
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
