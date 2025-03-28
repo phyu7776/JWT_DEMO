@@ -65,3 +65,5 @@ spring:
 jwt:
   secret: {secret key}
 ```
+
+📌 [API 명세 보기](./docs/api-spec.md)
