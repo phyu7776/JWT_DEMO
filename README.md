@@ -24,9 +24,11 @@ src
 │
 └── service
     └── user
-        ├── UserService.java
-        ├── UserServiceImpl.java
-        └── UserVO.java
+        ├── UserService.java             # 사용자 서비스 인터페이스
+        ├── UserServiceImpl.java         # 사용자 서비스 구현체
+        ├── UserRepository.java          # JPA 기반 사용자 Repository
+        ├── UserEntity.java              # JPA 사용자 Entity
+        └── UserVO.java                  # 요청/응답용 사용자 DTO
 ```
 ---
 
@@ -36,8 +38,26 @@ src
 ./gradlew bootRun
 ```
 
-## application.yml 안에 JWT에 사용할 secret key 작성
-```
+## application.yml 
+```yaml
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb                 # H2 메모리 DB (테스트용)
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true                         # H2 웹 콘솔 활성화 (http://localhost:8080/h2-console)
+
+  jpa:
+    hibernate:
+      ddl-auto: update                      # 엔티티 기반 테이블 자동 생성/업데이트
+    show-sql: true                          # 콘솔에 SQL 출력
+    properties:
+      hibernate:
+        format_sql: true                    # SQL 포맷팅
 jwt:
   secret: {secret key}
 ```
