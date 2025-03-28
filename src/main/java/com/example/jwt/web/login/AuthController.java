@@ -4,6 +4,7 @@ import com.example.jwt.config.excetion.APIException;
 import com.example.jwt.service.user.UserService;
 import com.example.jwt.service.user.UserVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,5 +27,11 @@ public class AuthController {
         }
 
         return ResponseEntity.ok(userService.login(user));
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<Void> signup(@RequestBody UserVO user) {
+        userService.signup(user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

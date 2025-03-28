@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -21,8 +23,10 @@ public class SecurityConfig {
         http
                 // 로그인 관련 접근은 인증이 없어도 허가
                 .authorizeHttpRequests(
-                        auth 
-                                -> auth.requestMatchers("/login/**").permitAll().anyRequest().authenticated()
+                        auth -> auth
+                                .requestMatchers("/login/**").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll() //TODO H2 CONSOLE 허용
+                                .anyRequest().authenticated()
                 )
                 
                 // JWT로 사용할꺼라 Session 생성안함
@@ -34,11 +38,13 @@ public class SecurityConfig {
                 // JWT로 인증하기에 ID/PW Filter 이전에 authFilter로 먼저 인증 처리
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 
-                .csrf(csrf -> csrf.disable())
-                .httpBasic(httpBasic -> httpBasic.disable())
-                
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 //로그인 페이지 미사용
-                .formLogin(formLogin -> formLogin.disable());
+                .formLogin(AbstractHttpConfigurer::disable)
+
+                //Iframe 허용
+                .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
 
         return http.build();
     }
