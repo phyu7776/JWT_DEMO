@@ -9,6 +9,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.security.Key;
 import java.util.Base64;
@@ -75,6 +76,12 @@ public class JwtTokenProvider {
 
     // 요청 헤더에서 토큰 가져오기
     public String getToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+        String token = request.getHeader("Authorization");
+
+        if (!ObjectUtils.isEmpty(token)) {
+            return token.replace("Bearer ", "");
+        }
+
+        return null;
     }
 }

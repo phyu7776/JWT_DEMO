@@ -6,10 +6,11 @@ import com.example.jwt.service.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,13 +20,26 @@ public class AdminContorller {
     private final UserRepository userRepository;
 
     @PutMapping("/approve/{userId}")
-    public ResponseEntity<?> approveUser(@PathVariable String userId) {
-    UserEntity user = userRepository.findById(userId)
-            .orElseThrow(() -> new APIException(APIException.ErrorCode.USER_INFO_INVALID));
+    public ResponseEntity<?> approveUser(@RequestBody List<String> userIds) {
 
-    user.approve();
-    userRepository.save(user);
+        List<String> approved = new ArrayList<>();
+        List<String> failed = new ArrayList<>();
+
+        for(String userId: userIds) {
+            userRepository.findById(userId).ifPresentOrElse(
+                    user -> {
+                        user.approve();
+                        userRepository.save(user);
+                        approved.add(userId);
+                    },
+                    () -> failed.add(userId)
+            );
+        }
     
-    return ResponseEntity.ok("승인 완료");
+    return ResponseEntity.ok(Map.of(
+            "approved", approved,
+            "failed", failed
+    ));
+        
     }
 }
