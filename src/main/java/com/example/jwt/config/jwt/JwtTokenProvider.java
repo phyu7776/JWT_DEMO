@@ -32,8 +32,10 @@ public class JwtTokenProvider {
     }
 
     // 토큰 생성
-    public String generateToken(String userId) {
+    public String generateToken(String userId, String role) {
         Claims claims = Jwts.claims().setSubject(userId);
+        claims.put("role", role);
+
         Date now = new Date();
         Date expireTime = new Date(now.getTime() + TIME_TO_LIVE);
 
@@ -51,6 +53,14 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    // 사용자 role 추출
+    public String getRole(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 
     // 토큰 검증

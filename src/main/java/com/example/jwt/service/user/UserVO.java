@@ -9,4 +9,13 @@ public class UserVO {
 
     private String userId;
     private String password;
+
+    public enum role {
+        USER,
+        ADMIN;
+
+        public String getRole() {
+            return this.name();
+        }
+    }
 }

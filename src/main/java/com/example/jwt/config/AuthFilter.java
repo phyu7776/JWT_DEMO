@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -30,9 +32,9 @@ public class AuthFilter extends OncePerRequestFilter {
 
         if (!ObjectUtils.isEmpty(token) && jwtTokenProvider.validateToken(token)) {
 
-            String userId = jwtTokenProvider.getUserId(token);
+            JwtAuthentication authentication = new JwtAuthentication(jwtTokenProvider.getUserId(token),
+                    null, List.of(new SimpleGrantedAuthority("ROLE_" + jwtTokenProvider.getRole(token))));
 
-            JwtAuthentication authentication = new JwtAuthentication(userId, null, null);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);

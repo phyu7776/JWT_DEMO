@@ -2,8 +2,8 @@ package com.example.jwt.service.user;
 
 import com.example.jwt.config.excetion.APIException;
 import com.example.jwt.config.jwt.JwtTokenProvider;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +12,7 @@ public class UserServiceImpl implements UserService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void signup(UserVO user) {
@@ -21,7 +22,8 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = UserEntity.builder()
                 .userId(user.getUserId())
-                .password(user.getPassword())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .role(UserVO.role.USER.getRole())
                 .build();
 
         userRepository.save(userEntity);
@@ -32,10 +34,14 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new APIException(APIException.ErrorCode.USER_INFO_INVALID));
 
-        if (!userEntity.getPassword().equals(user.getPassword())) {
+        if (!passwordEncoder.matches(user.getPassword(), userEntity.getPassword())) {
             throw new APIException(APIException.ErrorCode.INVALID_PASSWORD);
         }
 
-        return jwtTokenProvider.generateToken(user.getUserId());
+        if (!userEntity.isApproved()){
+            throw new APIException(APIException.ErrorCode.USER_NOT_APPROVED);
+        }
+
+        return jwtTokenProvider.generateToken(userEntity.getUserId(), userEntity.getRole());
     }
 }
