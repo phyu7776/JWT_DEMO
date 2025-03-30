@@ -35,7 +35,7 @@ Spring Boot + JWT 인증 기반 API 명세입니다.
 
 ### 🔐 권한
 - `ADMIN` 권한 필요 (JWT 토큰 필요)
-- 
+  
 ### 📥 Request Body
 ```json
 ["hamppung", "cooldev", "testuser"]
