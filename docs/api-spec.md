@@ -1,7 +1,6 @@
 # API 명세서
 
-Spring Boot + JWT 인증 기반 API 명세입니다.  
-현재 지원하는 기능은 회원가입, 로그인입니다.
+Spring Boot + JWT 인증 기반 API 명세입니다. 
 
 ## 회원가입
 - **URL**: `/login/signup`  
