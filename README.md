@@ -20,13 +20,17 @@ src
 │   │   ├── ApiException.java
 │   │   ├── ErrorCode.java
 │   │   └── GlobalExceptionHandler.java
+│   ├── initializer
+│   │   └── AdminInitializer.java # 최초 관리자 계정 생성
 │   └── jwt
 │       ├── JwtTokenProvider.java      # JWT 생성/검증 유틸
 │       └── JwtAuthentication.java     # 인증 객체
 │
 ├── web
 │   └── login
-│       └── AuthController.java        # 로그인 API 컨트롤러
+│   │   └── UserController.java        # 유저 정보 API
+│   └── admin
+        └── AdminController.java       # 관리자 API
 │
 └── service
     └── user
@@ -66,4 +70,8 @@ spring:
         format_sql: true                    # SQL 포맷팅
 jwt:
   secret: {secret key}
+
+admin:
+  id: ${ADMIN_ID}
+  password: ${ADMIN_PASSWORD}
 ```
