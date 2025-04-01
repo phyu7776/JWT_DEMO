@@ -24,6 +24,8 @@ public class UserEntity {
 
     private String role;
 
+    private String state;
+
     private boolean approved;
 
     private Timestamp createdAt;
@@ -31,7 +33,7 @@ public class UserEntity {
     private Timestamp approveDate;
 
     @Builder
-    public UserEntity(String userId, String password, String role) {
+    public UserEntity(String userId, String password, String role, String state) {
         this.userId = userId;
         this.password = password;
         this.role = role;
@@ -40,6 +42,7 @@ public class UserEntity {
     @PrePersist
     public void prePersist() {
         this.createdAt = Timestamp.valueOf(LocalDateTime.now());
+        this.state = UserVO.state.WAIT.getState();
     }
 
 

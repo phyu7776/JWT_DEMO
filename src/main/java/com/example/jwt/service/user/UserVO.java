@@ -18,4 +18,14 @@ public class UserVO {
             return this.name();
         }
     }
+
+    public enum state {
+        DELETE,
+        WAIT,
+        USE;
+
+        public String getState() {
+            return this.name();
+        }
+    }
 }
