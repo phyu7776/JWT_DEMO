@@ -1,23 +1,40 @@
 package com.example.jwt.service.user;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
+import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor
+@Setter
+@AllArgsConstructor
+@Builder
 public class UserVO {
 
+    private String UID;
+
     private String userId;
+
+    private String name;
+
+    private String nickname;
+
+    private String role;
+
+    private LocalDate birthday;
+
+    private String token;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Getter
+    @RequiredArgsConstructor
     public enum role {
-        USER,
-        ADMIN;
+        USER("USER"),
+        ADMIN("ADMIN");
 
-        public String getRole() {
-            return this.name();
-        }
+        private final String role;
     }
 
     @Getter

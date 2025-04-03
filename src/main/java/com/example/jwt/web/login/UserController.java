@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserVO user) {
+    public ResponseEntity<UserVO> login(@RequestBody UserVO user) {
 
         if (ObjectUtils.isEmpty(user.getUserId())) {
             throw new APIException(APIException.ErrorCode.USER_INFO_INVALID);

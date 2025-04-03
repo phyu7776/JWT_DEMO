@@ -22,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = UserEntity.builder()
                 .userId(user.getUserId())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .birthDate(user.getBirthday())
                 .password(passwordEncoder.encode(user.getPassword()))
                 .role(UserVO.role.USER.getRole())
                 .build();
@@ -30,8 +33,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(UserVO user) {
-        UserEntity userEntity = userRepository.findById(user.getUserId())
+    public UserVO login(UserVO user) {
+        UserEntity userEntity = userRepository.findByUserId(user.getUserId())
                 .orElseThrow(() -> new APIException(APIException.ErrorCode.USER_INFO_INVALID));
 
         if (!passwordEncoder.matches(user.getPassword(), userEntity.getPassword())) {
@@ -42,6 +45,14 @@ public class UserServiceImpl implements UserService {
             throw new APIException(APIException.ErrorCode.USER_NOT_APPROVED);
         }
 
-        return jwtTokenProvider.generateToken(userEntity.getUserId(), userEntity.getRole());
+        user.setUID(userEntity.getUID());
+        user.setUserId(userEntity.getUserId());
+        user.setName(userEntity.getName());
+        user.setRole(userEntity.getRole());
+        user.setBirthday(userEntity.getBirthDate());
+        user.setToken(jwtTokenProvider.generateToken(userEntity.getUserId(), userEntity.getRole()));
+        user.setNickname(userEntity.getNickname());
+
+        return user;
     }
 }

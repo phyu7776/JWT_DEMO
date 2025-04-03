@@ -9,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
+
 @Configuration
 @RequiredArgsConstructor
 public class AdminInitializer implements CommandLineRunner {
@@ -28,7 +30,10 @@ public class AdminInitializer implements CommandLineRunner {
         UserEntity entity = UserEntity.builder()
                 .userId(userId)
                 .password(passwordEncoder.encode(password))
+                .name("admin")
+                .nickname("admin")
                 .role(UserVO.role.ADMIN.getRole())
+                .birthDate(LocalDate.now())
                 .build();
 
         entity.approve();

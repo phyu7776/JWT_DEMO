@@ -1,23 +1,40 @@
 package com.example.jwt.service.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import com.example.jwt.utils.UIDGenerator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.ObjectUtils;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "users")
+@Table(
+        name = "Users",
+        indexes = {
+                @Index(name = "idx_user_search", columnList =  "role, state, name, nickname")
+        }
+)
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
+    private String UID;
+
+    private String name;
+
+    private String nickname;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
+
     private String userId;
 
     private String password;
@@ -28,27 +45,24 @@ public class UserEntity {
 
     private boolean approved;
 
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
-    private Timestamp approveDate;
-
-    @Builder
-    public UserEntity(String userId, String password, String role, String state) {
-        this.userId = userId;
-        this.password = password;
-        this.role = role;
-    }
+    private LocalDateTime approveDate;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = Timestamp.valueOf(LocalDateTime.now());
-        this.state = UserVO.STATE.WAIT.getName();
+        this.UID = UIDGenerator.generateUID();
+        this.createdAt = LocalDateTime.now();
+        if (ObjectUtils.isEmpty(this.state)) {
+            this.state = UserVO.STATE.WAIT.getName();
+        }
     }
 
 
     public void approve() {
+        this.state = UserVO.STATE.USE.getName();
         this.approved = true;
-        this.approveDate = new Timestamp(System.currentTimeMillis());
+        this.approveDate = LocalDateTime.now();
     }
 
 }
