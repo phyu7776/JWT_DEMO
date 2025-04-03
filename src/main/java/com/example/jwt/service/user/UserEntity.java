@@ -42,7 +42,7 @@ public class UserEntity {
     @PrePersist
     public void prePersist() {
         this.createdAt = Timestamp.valueOf(LocalDateTime.now());
-        this.state = UserVO.state.WAIT.getState();
+        this.state = UserVO.STATE.WAIT.getName();
     }
 
 

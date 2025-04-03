@@ -2,6 +2,7 @@ package com.example.jwt.service.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -19,13 +20,14 @@ public class UserVO {
         }
     }
 
-    public enum state {
-        DELETE,
-        WAIT,
-        USE;
+    @Getter
+    @RequiredArgsConstructor
+    public enum STATE {
+        DELETE("DELETE"),
+        WAIT("WAIT"),
+        USE("USE")
+        ;
 
-        public String getState() {
-            return this.name();
-        }
+        private final String name;
     }
 }
