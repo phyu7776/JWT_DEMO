@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -20,16 +22,15 @@ public class UserServiceImpl implements UserService {
             throw new APIException(APIException.ErrorCode.DUPLICATE_USER);
         }
 
-        UserEntity userEntity = UserEntity.builder()
+        userRepository.save(UserEntity.builder()
                 .userId(user.getUserId())
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .birthDate(user.getBirthday())
                 .password(passwordEncoder.encode(user.getPassword()))
+                .state(UserVO.STATE.WAIT.getName())
                 .role(UserVO.role.USER.getRole())
-                .build();
-
-        userRepository.save(userEntity);
+                .build());
     }
 
     @Override
@@ -45,14 +46,15 @@ public class UserServiceImpl implements UserService {
             throw new APIException(APIException.ErrorCode.USER_NOT_APPROVED);
         }
 
-        user.setUID(userEntity.getUID());
-        user.setUserId(userEntity.getUserId());
-        user.setName(userEntity.getName());
-        user.setRole(userEntity.getRole());
-        user.setBirthday(userEntity.getBirthDate());
+        user = UserVO.toUserVO(userEntity);
         user.setToken(jwtTokenProvider.generateToken(userEntity.getUserId(), userEntity.getRole()));
-        user.setNickname(userEntity.getNickname());
-
         return user;
+    }
+
+    @Override
+    public List<UserVO> getAllUsers() {
+        List<UserEntity> userList = userRepository.findAllByOrderByCreatedAtDesc();
+
+        return userList.stream().map(UserVO::toUserVO).toList();
     }
 }

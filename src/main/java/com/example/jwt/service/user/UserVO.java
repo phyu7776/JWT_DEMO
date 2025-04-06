@@ -1,5 +1,6 @@
 package com.example.jwt.service.user;
 
+import com.example.jwt.config.constant.EntitiyConstant;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -28,10 +29,22 @@ public class UserVO {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    public static UserVO toUserVO(UserEntity entity) {
+        return UserVO.builder()
+                .UID(entity.getUID())
+                .userId(entity.getUserId())
+                .name(entity.getName())
+                .nickname(entity.getNickname())
+                .role(entity.getRole())
+                .birthday(entity.getBirthDate())
+                .build();
+    }
+
     @Getter
     @RequiredArgsConstructor
     public enum role {
-        USER("USER"),
+        USER("USER"), // 일반
+        SUPERVISOR("SUPERVISOR"), //일반관리
         ADMIN("ADMIN");
 
         private final String role;

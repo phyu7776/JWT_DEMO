@@ -1,14 +1,13 @@
 package com.example.jwt.service.user;
 
-import com.example.jwt.utils.UIDGenerator;
+import com.example.jwt.config.base.BaseEntity;
+import com.example.jwt.config.constant.EntitiyConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
@@ -19,16 +18,13 @@ import java.time.LocalDateTime;
 @Table(
         name = "Users",
         indexes = {
-                @Index(name = "idx_user_search", columnList =  "role, state, name, nickname")
+                @Index(name = "idx_user_search", columnList =  "createdAt, role, state, name, nickname")
         }
 )
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
-
-    @Id
-    private String UID;
+public class UserEntity extends BaseEntity {
 
     private String name;
 
@@ -47,18 +43,7 @@ public class UserEntity {
 
     private boolean approved;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
     private LocalDateTime approveDate;
-
-    @PrePersist
-    public void prePersist() {
-        this.UID = UIDGenerator.generateUID();
-        if (ObjectUtils.isEmpty(this.state)) {
-            this.state = UserVO.STATE.WAIT.getName();
-        }
-    }
 
     public void approve() {
         this.state = UserVO.STATE.USE.getName();
@@ -66,4 +51,16 @@ public class UserEntity {
         this.approveDate = LocalDateTime.now();
     }
 
+    public void changeRole(String role) {
+        if (!ObjectUtils.isEmpty(role)) {
+            this.role = role;
+        } else {
+            this.role = UserVO.role.USER.getRole();
+        }
+    }
+
+    @Override
+    public String getEntityType() {
+        return EntitiyConstant.USER_ENTITY.getValue();
+    }
 }
