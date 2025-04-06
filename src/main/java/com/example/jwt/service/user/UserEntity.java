@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(
-        name = "Users",
+        name = "users",
         indexes = {
                 @Index(name = "idx_user_search", columnList =  "createdAt, role, state, name, nickname")
         }

@@ -7,15 +7,16 @@ import com.example.jwt.service.user.UserRepository;
 import com.example.jwt.service.user.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
 @Configuration
 @RequiredArgsConstructor
-public class Initializer implements CommandLineRunner {
+public class Initializer {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -27,10 +28,18 @@ public class Initializer implements CommandLineRunner {
     @Value("${admin.password}")
     private String password;
 
-    private final String[] initMenu = {"강습 예약", "투어 신청", "증고 매물", "공구", "게시판", "로그북", "시스템 설정"};
+    private final InitMenu[] initMenus = {
+            new InitMenu("시스템 설정", "/system-settings", UserVO.role.ADMIN.getRole(), 0),
+            new InitMenu("게시판", "/board", "",1),
+            new InitMenu("강습 예약", "/lesson-reservation", "", 2),
+            new InitMenu("투어 신청", "/tour-application", "", 3),
+            new InitMenu("중고 매물", "/used-market", "", 4),
+            new InitMenu("공구", "/co-purchase", "", 5),
+            new InitMenu("로그북", "/logbook", "", 6)
+    };
 
-    @Override
-    public void run(String... args) throws Exception {
+    @EventListener(ApplicationReadyEvent.class)
+    public void init() {
         createAdminAccount();
         createDefaultMenus();
     }
@@ -53,12 +62,17 @@ public class Initializer implements CommandLineRunner {
     }
 
     private void createDefaultMenus() {
-        for (String menu : initMenu) {
-            MenuEntity entity = MenuEntity.builder()
-                    .name(menu)
-                    .build();
+        for (InitMenu menu : initMenus) {
+            if (!menuRepository.existsByName(menu.getName())) {
+                MenuEntity entity = MenuEntity.builder()
+                        .name(menu.getName())
+                        .url(menu.getUrl())
+                        .restricted(menu.getRestrict())
+                        .menuOrder(menu.getOrder())
+                        .build();
 
-            menuRepository.save(entity);
+                menuRepository.save(entity);
+            }
         }
     }
 }

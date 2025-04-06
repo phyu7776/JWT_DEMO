@@ -1,5 +1,7 @@
 package com.example.jwt.service.menu;
 
+import com.example.jwt.config.excetion.APIException;
+import com.example.jwt.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,10 @@ public class MenuServiceImpl implements MenuService{
 
     @Override
     public void create(MenuVO menu) {
+        if (menuRepository.existsByName(menu.getName())) {
+            throw new APIException(APIException.ErrorCode.DUPLICATE_MENU);
+        }
+
         menuRepository.save(MenuEntity.builder()
                 .name(menu.getName())
                 .description(menu.getDescription())
@@ -24,7 +30,7 @@ public class MenuServiceImpl implements MenuService{
 
     @Override
     public List<MenuVO> getMenu() {
-        List<MenuEntity> menuList = menuRepository.findAllByOrderByNameDesc();
+        List<MenuEntity> menuList = menuRepository.findAllByOrderByMenuOrderAscNameDesc();
         return menuList.stream().map(MenuVO::toMenuVO).toList();
     }
 }

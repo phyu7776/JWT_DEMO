@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface MenuRepository extends JpaRepository<MenuEntity, String> {
 
-    List<MenuEntity> findAllByOrderByNameDesc();
+    boolean existsByName(String name);
+
+    List<MenuEntity> findAllByOrderByMenuOrderAscNameDesc();
 }

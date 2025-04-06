@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Table(
-        name = "Menus",
+        name = "menus",
         indexes = {
                 @Index(name = "idx_menus_search", columnList =  "name, createdAt")
         }
@@ -32,6 +32,8 @@ public class MenuEntity extends BaseEntity {
     private String url;
 
     private String restricted;
+
+    private int menuOrder;
 
     @Override
     public String getEntityType() {
