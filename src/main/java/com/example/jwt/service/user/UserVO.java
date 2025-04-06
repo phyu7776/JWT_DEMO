@@ -1,6 +1,5 @@
 package com.example.jwt.service.user;
 
-import com.example.jwt.config.constant.EntitiyConstant;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -42,7 +41,7 @@ public class UserVO {
 
     @Getter
     @RequiredArgsConstructor
-    public enum role {
+    public enum ROLE {
         USER("USER"), // 일반
         SUPERVISOR("SUPERVISOR"), //일반관리
         ADMIN("ADMIN");

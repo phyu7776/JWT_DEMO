@@ -55,7 +55,7 @@ public class UserEntity extends BaseEntity {
         if (!ObjectUtils.isEmpty(role)) {
             this.role = role;
         } else {
-            this.role = UserVO.role.USER.getRole();
+            this.role = UserVO.ROLE.USER.getRole();
         }
     }
 

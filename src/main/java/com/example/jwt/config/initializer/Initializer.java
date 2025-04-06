@@ -29,7 +29,7 @@ public class Initializer {
     private String password;
 
     private final InitMenu[] initMenus = {
-            new InitMenu("시스템 설정", "/system-settings", UserVO.role.ADMIN.getRole(), 0),
+            new InitMenu("시스템 설정", "/system-settings", UserVO.ROLE.ADMIN.getRole(), 0),
             new InitMenu("게시판", "/board", "",1),
             new InitMenu("강습 예약", "/lesson-reservation", "", 2),
             new InitMenu("투어 신청", "/tour-application", "", 3),
@@ -51,7 +51,7 @@ public class Initializer {
                     .password(passwordEncoder.encode(password))
                     .name(userId)
                     .nickname(userId)
-                    .role(UserVO.role.ADMIN.getRole())
+                    .role(UserVO.ROLE.ADMIN.getRole())
                     .birthDate(LocalDate.now())
                     .build();
 

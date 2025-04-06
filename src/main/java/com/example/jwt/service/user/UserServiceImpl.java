@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
                 .birthDate(user.getBirthday())
                 .password(passwordEncoder.encode(user.getPassword()))
                 .state(UserVO.STATE.WAIT.getName())
-                .role(UserVO.role.USER.getRole())
+                .role(UserVO.ROLE.USER.getRole())
                 .build());
     }
 
