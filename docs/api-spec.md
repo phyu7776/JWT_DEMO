@@ -40,3 +40,22 @@ Spring Boot + JWT 인증 기반 API 명세입니다.
 ```json
 ["hamppung", "cooldev", "testuser"]
 ```
+
+## 전체 유저 조회
+- **URL**: `/admin/getUsers/`
+- **Method**: `GET`
+- **설명**: 전체 유저 목록 조회 (생성일 기준 내림차순).
+
+### 🔐 권한
+- `ADMIN` 권한 필요 (JWT 토큰 필요)
+  
+### 📥 Request Body
+```json
+  {
+    "userId": "hamppung",
+    "name": "햄뿡이",
+    "nickname": "햄스터",
+    "role": "USER",
+    "birthday": "2000-01-01T00:00:00"
+  },
+```
