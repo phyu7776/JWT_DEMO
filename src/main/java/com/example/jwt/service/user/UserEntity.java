@@ -28,7 +28,6 @@ import java.time.LocalDateTime;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String UID;
 
     private String name;
@@ -51,7 +50,6 @@ public class UserEntity {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
     private LocalDateTime approveDate;
 
     @PrePersist
