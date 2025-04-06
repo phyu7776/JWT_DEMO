@@ -16,12 +16,15 @@ src
 ├── config
 │   ├── SecurityConfig.java            # Spring Security 설정
 │   ├── AuthFilter.java                # JWT 인증 필터
+│   │
 │   ├── exception                      # 예외 처리 관련 폴더
 │   │   ├── ApiException.java
 │   │   ├── ErrorCode.java
 │   │   └── GlobalExceptionHandler.java
+│   │
 │   ├── initializer
-│   │   └── AdminInitializer.java # 최초 관리자 계정 생성
+│   │   └── AdminInitializer.java       # 최초 관리자 계정 생성
+│   │
 │   └── jwt
 │       ├── JwtTokenProvider.java      # JWT 생성/검증 유틸
 │       └── JwtAuthentication.java     # 인증 객체
@@ -30,15 +33,28 @@ src
 │   └── login
 │   │   └── UserController.java        # 유저 정보 API
 │   └── admin
-        └── AdminController.java       # 관리자 API
+|   │   └── AdminController.java       # 관리자 API
+|   └── web.menu                
+|       └── MenuController.java        # 메뉴 조회 API
 │
 └── service
     └── user
-        ├── UserService.java             # 사용자 서비스 인터페이스
-        ├── UserServiceImpl.java         # 사용자 서비스 구현체
-        ├── UserRepository.java          # JPA 기반 사용자 Repository
-        ├── UserEntity.java              # JPA 사용자 Entity
-        └── UserVO.java                  # 요청/응답용 사용자 DTO
+    │   ├── UserService.java             # 사용자 서비스 인터페이스
+    │   ├── UserServiceImpl.java         # 사용자 서비스 구현체
+    │   ├── UserRepository.java          # JPA 기반 사용자 Repository
+    │   ├── UserEntity.java              # JPA 사용자 Entity
+    │   └── UserVO.java                  # 요청/응답용 사용자 DTO
+    |
+    └── admin                   
+    │   ├── AdminService.java              # 관리자 Service 인터페이스
+    │   └── AdminServiceImpl.java          # 관리자 Service 구현   
+    │
+    └── menu
+        ├── MenuEntity.java                # 메뉴 Entity
+        ├── MenuRepository.java            # 메뉴 Repository
+        ├── MenuService.java               # 메뉴 Service 인터페이스
+        └── MenuServiceImpl.java           # 메뉴 Service 구현
+        └── MenuVO.java                    # 요청/응답용 사용자 DTO
 ```
 ---
 
