@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class UserVO {
 

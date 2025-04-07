@@ -2,6 +2,7 @@ package com.example.jwt.config;
 
 import com.example.jwt.config.jwt.JwtAuthentication;
 import com.example.jwt.config.jwt.JwtTokenProvider;
+import com.example.jwt.config.redis.LettuceUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import java.util.List;
 public class AuthFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final LettuceUtil lettuceUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -32,8 +34,11 @@ public class AuthFilter extends OncePerRequestFilter {
 
         if (!ObjectUtils.isEmpty(token) && jwtTokenProvider.validateToken(token)) {
 
-            JwtAuthentication authentication = new JwtAuthentication(jwtTokenProvider.getUserId(token),
-                    null, List.of(new SimpleGrantedAuthority("ROLE_" + jwtTokenProvider.getRole(token))));
+            JwtAuthentication authentication = new JwtAuthentication(
+                    lettuceUtil.getUser(token)
+                    , jwtTokenProvider.getUserId(token)
+                    , null
+                    , List.of(new SimpleGrantedAuthority("ROLE_" + jwtTokenProvider.getRole(token))));
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

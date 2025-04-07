@@ -2,6 +2,8 @@ package com.example.jwt.service.user;
 
 import com.example.jwt.config.excetion.APIException;
 import com.example.jwt.config.jwt.JwtTokenProvider;
+import com.example.jwt.config.redis.LettuceUtil;
+import com.example.jwt.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LettuceUtil lettuceUtil;
 
     @Override
     public void signup(UserVO user) {
@@ -48,6 +51,9 @@ public class UserServiceImpl implements UserService {
 
         user = UserVO.toUserVO(userEntity);
         user.setToken(jwtTokenProvider.generateToken(userEntity.getUserId(), userEntity.getRole()));
+
+        lettuceUtil.saveJWT(user.getToken(), user);
+
         return user;
     }
 

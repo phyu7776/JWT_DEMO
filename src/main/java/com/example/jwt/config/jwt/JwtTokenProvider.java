@@ -18,7 +18,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private static final long TIME_TO_LIVE = 60 * 60 * 1000L;
+    public static final long TIME_TO_LIVE = 60 * 60 * 1000L;
 
     // jwt 암호를 하기위한 비밀키
     @Value("${jwt.secret}")
