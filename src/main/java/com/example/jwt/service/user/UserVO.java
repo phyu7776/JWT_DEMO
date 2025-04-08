@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class UserVO {
 
     private LocalDate birthday;
 
-    private String token;
+    private Map<String, String> token;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;

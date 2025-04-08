@@ -31,6 +31,7 @@ public class SecurityConfig {
                 // 로그인 관련 접근은 인증이 없어도 허가
                 .authorizeHttpRequests(
                         auth -> auth
+                                .requestMatchers("/config/getConfig").permitAll()
                                 .requestMatchers("/users/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll() //TODO H2 CONSOLE 허용
                                 .anyRequest().authenticated()

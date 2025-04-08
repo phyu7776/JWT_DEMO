@@ -1,6 +1,7 @@
 package com.example.jwt.web.login;
 
 import com.example.jwt.config.excetion.APIException;
+import com.example.jwt.config.redis.LettuceUtil;
 import com.example.jwt.service.user.UserService;
 import com.example.jwt.service.user.UserVO;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final LettuceUtil lettuceUtil;
 
     @PostMapping("/login")
     public ResponseEntity<UserVO> login(@RequestBody UserVO user) {
@@ -33,5 +35,22 @@ public class UserController {
     public ResponseEntity<Void> signup(@RequestBody UserVO user) {
         userService.signup(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody UserVO user) {
+        try {
+            lettuceUtil.deleteTokens(user.getToken());
+        } catch (APIException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<UserVO> reissue(@RequestBody UserVO user) {
+        return ResponseEntity.ok(userService.userReissue(user));
     }
 }
