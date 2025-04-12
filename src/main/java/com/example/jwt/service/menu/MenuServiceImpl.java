@@ -1,9 +1,11 @@
 package com.example.jwt.service.menu;
 
 import com.example.jwt.config.excetion.APIException;
-import com.example.jwt.config.jwt.JwtTokenProvider;
+import com.example.jwt.service.user.UserVO;
+import com.example.jwt.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -29,8 +31,20 @@ public class MenuServiceImpl implements MenuService{
     }
 
     @Override
-    public List<MenuVO> getMenu() {
-        List<MenuEntity> menuList = menuRepository.findAllByOrderByMenuOrderAscNameDesc();
+    public List<MenuVO> getMain() {
+        List<MenuEntity> menuList = menuRepository.findByParentUIDIsNullOrderByMenuOrderAscNameDesc();
+
+        UserVO user = SecurityUtil.getCurrentUser();
+
+        return menuList.stream()
+                .map(MenuVO::toMenuVO)
+                .filter(menu -> ObjectUtils.isEmpty(menu.getRestricted()) || menu.getRestricted().contains(user.getRole()))
+                .toList();
+
+    }
+
+    public List<MenuVO> get(String uid) {
+        List<MenuEntity> menuList = menuRepository.findByParentUIDOrderByMenuOrderAscNameDesc(uid);
         return menuList.stream().map(MenuVO::toMenuVO).toList();
     }
 }

@@ -21,7 +21,7 @@ public class AdminServiceImpl implements AdminService {
         List<String> failed = new ArrayList<>();
 
         for (UserVO user : users) {
-            userRepository.findById(user.getUserId()).ifPresentOrElse(
+            userRepository.findByUID(user.getUID()).ifPresentOrElse(
                     userEntity -> {
                         userEntity.approve();
                         userEntity.changeRole(user.getRole());

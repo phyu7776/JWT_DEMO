@@ -6,5 +6,7 @@ public interface MenuService {
 
     public void create(MenuVO menu);
 
-    public List<MenuVO> getMenu();
+    public List<MenuVO> getMain();
+
+    public List<MenuVO> get(String uid);
 }

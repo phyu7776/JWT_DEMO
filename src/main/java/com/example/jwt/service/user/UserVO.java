@@ -23,6 +23,8 @@ public class UserVO {
 
     private String role;
 
+    private String state;
+
     private LocalDate birthday;
 
     private Map<String, String> token;
@@ -36,6 +38,7 @@ public class UserVO {
                 .userId(entity.getUserId())
                 .name(entity.getName())
                 .nickname(entity.getNickname())
+                .state(entity.getState())
                 .role(entity.getRole())
                 .birthday(entity.getBirthDate())
                 .build();
@@ -54,9 +57,9 @@ public class UserVO {
     @Getter
     @RequiredArgsConstructor
     public enum STATE {
-        DELETE("DELETE"),
-        WAIT("WAIT"),
-        USE("USE")
+        DELETE("D"),
+        WAIT("W"),
+        USE("U")
         ;
 
         private final String name;

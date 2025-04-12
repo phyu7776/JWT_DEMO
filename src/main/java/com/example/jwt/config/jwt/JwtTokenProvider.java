@@ -1,6 +1,7 @@
 package com.example.jwt.config.jwt;
 
-import com.example.jwt.config.redis.LettuceUtil;
+import com.example.jwt.utils.LettuceUtil;
+import com.example.jwt.service.user.UserVO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -96,8 +97,22 @@ public class JwtTokenProvider {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 
-            if (ObjectUtils.isEmpty(lettuceUtil.getUser(token).getUID())) {
-                throw new JwtException("Invalid token");
+            // 토큰이 accessToken 인지 refreshToken 인지 구분
+            Map<Object, Object> entries = lettuceUtil.getHashMap(token);
+            if (!entries.isEmpty()) {
+                // accessToken
+                UserVO user = lettuceUtil.getUser(token);
+
+                if (ObjectUtils.isEmpty(user.getUID())) {
+                    throw new JwtException("Invalid token");
+                }
+            } else {
+                // refreshToken
+                Object checkToken = lettuceUtil.getRefreshToken(token);
+
+                if (ObjectUtils.isEmpty(checkToken) || "BLOCK_TOKEN".equals(checkToken.toString())) {
+                    throw new JwtException("Invalid token");
+                }
             }
 
             return true;
@@ -105,6 +120,7 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
 
     // 요청 헤더에서 토큰 가져오기
     public String getToken(HttpServletRequest request) {

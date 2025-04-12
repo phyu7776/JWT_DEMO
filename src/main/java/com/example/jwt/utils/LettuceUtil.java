@@ -1,4 +1,4 @@
-package com.example.jwt.config.redis;
+package com.example.jwt.utils;
 
 import com.example.jwt.config.constant.ObjectConstant;
 import com.example.jwt.config.jwt.JwtTokenProvider;
@@ -42,8 +42,8 @@ public class LettuceUtil {
         return objectMapper.convertValue(redisTemplate.opsForHash().entries(token), UserVO.class);
     }
 
-    public String getRefreshToken(String refreshToken) {
-        return String.valueOf(redisTemplate.opsForValue().get(refreshToken));
+    public Object getRefreshToken(String refreshToken) {
+        return redisTemplate.opsForValue().get(refreshToken);
     }
 
     public void deleteTokens(Map<String, String> tokens) {
@@ -56,5 +56,9 @@ public class LettuceUtil {
 
     public void blockToken(String token) {
         redisTemplate.opsForValue().set(token, "BLOCK_TOKEN", Duration.ofMillis(JwtTokenProvider.REFRESH_TIME_TO_LIVE));
+    }
+
+    public Map<Object, Object> getHashMap(String key) {
+        return redisTemplate.opsForHash().entries(key);
     }
 }

@@ -22,8 +22,13 @@ public class MenuController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<List<MenuVO>> getMenu() {
-        return ResponseEntity.ok(menuService.getMenu());
+    @GetMapping("/getMain")
+    public ResponseEntity<List<MenuVO>> getMain() {
+        return ResponseEntity.ok(menuService.getMain());
+    }
+
+    @GetMapping("/get/{uid}")
+    public ResponseEntity<List<MenuVO>> get(@PathVariable String uid) {
+        return ResponseEntity.ok(menuService.get(uid));
     }
 }

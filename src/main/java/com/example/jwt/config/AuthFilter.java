@@ -2,7 +2,7 @@ package com.example.jwt.config;
 
 import com.example.jwt.config.jwt.JwtAuthentication;
 import com.example.jwt.config.jwt.JwtTokenProvider;
-import com.example.jwt.config.redis.LettuceUtil;
+import com.example.jwt.utils.LettuceUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

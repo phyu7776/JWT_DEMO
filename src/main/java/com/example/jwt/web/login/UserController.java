@@ -1,7 +1,7 @@
 package com.example.jwt.web.login;
 
 import com.example.jwt.config.excetion.APIException;
-import com.example.jwt.config.redis.LettuceUtil;
+import com.example.jwt.utils.LettuceUtil;
 import com.example.jwt.service.user.UserService;
 import com.example.jwt.service.user.UserVO;
 import lombok.RequiredArgsConstructor;

@@ -23,6 +23,8 @@ public class MenuVO {
 
     private String restricted;
 
+    private String parentUID;
+
     public static MenuVO toMenuVO(MenuEntity entity) {
         return MenuVO.builder()
                 .UID(entity.getUID())
@@ -31,6 +33,7 @@ public class MenuVO {
                 .icon(entity.getIcon())
                 .url(entity.getUrl())
                 .restricted(entity.getRestricted())
+                .parentUID(entity.getParentUID())
                 .build();
     }
 }

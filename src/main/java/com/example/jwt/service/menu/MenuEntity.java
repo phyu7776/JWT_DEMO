@@ -33,6 +33,8 @@ public class MenuEntity extends BaseEntity {
 
     private String restricted;
 
+    private String parentUID;
+
     private int menuOrder;
 
     @Override

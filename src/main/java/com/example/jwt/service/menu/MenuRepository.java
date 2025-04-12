@@ -8,5 +8,7 @@ public interface MenuRepository extends JpaRepository<MenuEntity, String> {
 
     boolean existsByName(String name);
 
-    List<MenuEntity> findAllByOrderByMenuOrderAscNameDesc();
+    List<MenuEntity> findByParentUIDIsNullOrderByMenuOrderAscNameDesc();
+
+    List<MenuEntity> findByParentUIDOrderByMenuOrderAscNameDesc(String uid);
 }

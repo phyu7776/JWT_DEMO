@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     Optional<UserEntity> findByUserId(String userid);
 
     List<UserEntity> findAllByOrderByCreatedAtDesc();
+
+    Optional<UserEntity> findByUID(String uid);
 }

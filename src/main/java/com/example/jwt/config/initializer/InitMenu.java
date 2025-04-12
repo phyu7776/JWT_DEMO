@@ -10,5 +10,6 @@ public class InitMenu {
     private String name;
     private String url;
     private String restrict;
+    private String parentMenu;
     private int order;
 }

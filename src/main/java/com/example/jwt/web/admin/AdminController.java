@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +20,8 @@ public class AdminController {
     private final AdminService adminService;
     private final UserService userService;
 
-    @PutMapping("/approve/{userId}")
-    public ResponseEntity<?> approveUser(@RequestBody List<UserVO> users) {
+    @PutMapping("/approve")
+    public ResponseEntity<Map<String, Object>> approveUser(@RequestBody List<UserVO> users) {
         return ResponseEntity.ok(adminService.approveUser(users));
     }
 

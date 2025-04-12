@@ -3,7 +3,7 @@ package com.example.jwt.service.user;
 import com.example.jwt.config.constant.ObjectConstant;
 import com.example.jwt.config.excetion.APIException;
 import com.example.jwt.config.jwt.JwtTokenProvider;
-import com.example.jwt.config.redis.LettuceUtil;
+import com.example.jwt.utils.LettuceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         Map<String, String> oldTokens = user.getToken();
         String refreshToken = oldTokens.get(ObjectConstant.REFRESH_TOKEN);
 
-        String userId = lettuceUtil.getRefreshToken(refreshToken);
+        String userId = lettuceUtil.getRefreshToken(refreshToken).toString();
 
         if (!userId.equals(user.getUserId())) {
             throw new APIException(APIException.ErrorCode.INVALID_TOKEN);

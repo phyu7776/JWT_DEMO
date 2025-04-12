@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum EntitiyConstant {
     USER_ENTITY("userEntity"),
-    MENU_ENTITY("menuEntity")
+    MENU_ENTITY("menuEntity"),
+    CONFIG_ENTITY("configEntity"),
     ;
 
     public final String value;
