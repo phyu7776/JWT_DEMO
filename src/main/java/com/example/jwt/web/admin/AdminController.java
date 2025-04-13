@@ -29,4 +29,15 @@ public class AdminController {
     public ResponseEntity<List<UserVO>> getUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
+
+    @PatchMapping("/update")
+    public ResponseEntity<UserVO> updateUser(@RequestBody UserVO users) {
+        return ResponseEntity.ok(userService.updateUser(users));
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteUser(@RequestBody List<UserVO> users) {
+        userService.deleteUser(users);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -4,9 +4,11 @@ import com.example.jwt.config.constant.ObjectConstant;
 import com.example.jwt.config.excetion.APIException;
 import com.example.jwt.config.jwt.JwtTokenProvider;
 import com.example.jwt.utils.LettuceUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -92,5 +94,45 @@ public class UserServiceImpl implements UserService {
         lettuceUtil.blockToken(oldTokens.get(ObjectConstant.ACCESS_TOKEN));
 
         return user;
+    }
+
+    @Override
+    public void deleteUser(List<UserVO> user) {
+        for (UserVO userVO : user) {
+            userRepository.deleteById(userVO.getUID());
+        }
+    }
+
+    @Override
+    @Transactional
+    public UserVO updateUser(UserVO user) {
+        UserEntity userEntity = userRepository.findById(user.getUID())
+                .orElseThrow(() -> new APIException(APIException.ErrorCode.USER_INFO_INVALID));
+
+        if (!ObjectUtils.isEmpty(user.getName()) && !userEntity.getName().equals(user.getName())) {
+            userEntity.setName(user.getName());
+        }
+
+        if (!ObjectUtils.isEmpty(user.getNickname()) && !userEntity.getNickname().equals(user.getNickname())) {
+            userEntity.setNickname(user.getNickname());
+        }
+
+        if (user.getBirthday() != null && !userEntity.getBirthDate().equals(user.getBirthday())) {
+            userEntity.setBirthDate(user.getBirthday());
+        }
+
+        if (!ObjectUtils.isEmpty(user.getPassword()) && !passwordEncoder.matches(user.getPassword(), userEntity.getPassword())) {
+            userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        if (!ObjectUtils.isEmpty(user.getRole()) && !userEntity.getRole().equals(user.getRole())) {
+            userEntity.setRole(user.getRole());
+        }
+
+        if (!ObjectUtils.isEmpty(user.getState()) && !userEntity.getState().equals(user.getState())) {
+            userEntity.setState(user.getState());
+        }
+
+        return UserVO.toUserVO(userRepository.save(userEntity));
     }
 }
