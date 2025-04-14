@@ -4,6 +4,7 @@ import com.example.jwt.config.constant.ObjectConstant;
 import com.example.jwt.config.excetion.APIException;
 import com.example.jwt.config.jwt.JwtTokenProvider;
 import com.example.jwt.utils.LettuceUtil;
+import com.example.jwt.utils.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new APIException(APIException.ErrorCode.USER_INFO_INVALID));
 
         if (!passwordEncoder.matches(user.getPassword(), userEntity.getPassword())) {
-            throw new APIException(APIException.ErrorCode.INVALID_PASSWORD);
+            throw new APIException(APIException.ErrorCode.USER_INFO_INVALID);
         }
 
         if (!userEntity.isApproved()){
@@ -106,6 +107,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserVO updateUser(UserVO user) {
+
+        UserVO requestUser = SecurityUtil.getCurrentUser();
+
+        if (!ObjectUtils.isEmpty(requestUser) && !UserVO.ROLE.ADMIN.getRole().equals(requestUser.getRole())
+                && !requestUser.getUID().equals(user.getUID())) {
+            throw new APIException(APIException.ErrorCode.USER_INFO_INVALID);
+        }
+
         UserEntity userEntity = userRepository.findById(user.getUID())
                 .orElseThrow(() -> new APIException(APIException.ErrorCode.USER_INFO_INVALID));
 
@@ -134,5 +143,23 @@ public class UserServiceImpl implements UserService {
         }
 
         return UserVO.toUserVO(userRepository.save(userEntity));
+    }
+
+    @Override
+    public void changePassword(Map<String, String> passwordInfo) {
+
+        UserVO user = SecurityUtil.getCurrentUser();
+
+        UserEntity entity = userRepository.findById(user.getUID()).orElseThrow(
+                () -> new APIException(APIException.ErrorCode.USER_INFO_INVALID));
+
+        String originPassword = passwordInfo.get("currentPassword");
+
+        if (passwordEncoder.matches(originPassword, entity.getPassword())) {
+            entity.setPassword(passwordEncoder.encode(passwordInfo.get("newPassword")));
+            userRepository.save(entity);
+        } else {
+            throw new APIException(APIException.ErrorCode.INVALID_PASSWORD);
+        }
     }
 }

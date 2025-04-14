@@ -1,6 +1,7 @@
 package com.example.jwt.service.user;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -15,4 +16,6 @@ public interface UserService {
     void deleteUser(List<UserVO> user);
 
     UserVO updateUser(UserVO user);
+
+    void changePassword(Map<String, String> passwordInfo);
 }

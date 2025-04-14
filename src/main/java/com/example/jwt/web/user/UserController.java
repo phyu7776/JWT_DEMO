@@ -1,4 +1,4 @@
-package com.example.jwt.web.login;
+package com.example.jwt.web.user;
 
 import com.example.jwt.config.excetion.APIException;
 import com.example.jwt.utils.LettuceUtil;
@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +29,28 @@ public class UserController {
         }
 
         return ResponseEntity.ok(userService.login(user));
+    }
+
+    @GetMapping("/getUsers")
+    public ResponseEntity<List<UserVO>> getUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<UserVO> updateUser(@RequestBody UserVO users) {
+        return ResponseEntity.ok(userService.updateUser(users));
+    }
+
+    @PatchMapping("/changePassword")
+    public ResponseEntity<Void> changePassword(@RequestBody Map<String, String> passwordInfo) {
+        userService.changePassword(passwordInfo);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteUser(@RequestBody List<UserVO> users) {
+        userService.deleteUser(users);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/signup")
