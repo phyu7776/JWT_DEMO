@@ -1,61 +1,174 @@
 # API 명세서
 
-Spring Boot + JWT 인증 기반 API 명세입니다. 
+## 1. 사용자 관련 API
 
-## 회원가입
-- **URL**: `/login/signup`  
-- **Method**: `POST`  
-
-### Request Body
+### 회원가입
+- **URL**: `/users/signup`
+- **Method**: POST
+- **Request Body**:
 ```json
 {
-  "userId": "hamppung",
-  "password": "1234"
+    "userId": "user123",
+    "password": "password123",
+    "name": "홍길동",
+    "nickname": "길동이",
+    "birthday": "1990-01-01"
 }
 ```
 
-## 로그인 (JWT 발급)
-- **URL**: `/login`
-- **Method**: `POST`
-- **설명**: 관리자가 사용자의 가입을 승인합니다.  
-  승인된 사용자만 로그인할 수 있습니다.
-
-### 📥 Request Body
+### 로그인
+- **URL**: `/users/login`
+- **Method**: POST
+- **Request Body**:
 ```json
 {
-  "userId": "hamppung",
-  "password": "1234"
+    "userId": "user123",
+    "password": "password123"
 }
 ```
-
-## 유저 가입 승인
-- **URL**: `/admin/approve/`
-- **Method**: `PUT`
-- **설명**: 사용자 가입시 가입승인 합니다.
-
-### 🔐 권한
-- `ADMIN` 권한 필요 (JWT 토큰 필요)
-  
-### 📥 Request Body
+- **Response**:
 ```json
-["hamppung", "cooldev", "testuser"]
-```
-
-## 전체 유저 조회
-- **URL**: `/admin/getUsers/`
-- **Method**: `GET`
-- **설명**: 전체 유저 목록 조회 (생성일 기준 내림차순).
-
-### 🔐 권한
-- `ADMIN` 권한 필요 (JWT 토큰 필요)
-  
-### 📥 Request Body
-```json
-  {
-    "userId": "hamppung",
-    "name": "햄뿡이",
-    "nickname": "햄스터",
+{
+    "uid": "user_uid",
+    "userId": "user123",
+    "name": "홍길동",
+    "nickname": "길동이",
     "role": "USER",
-    "birthday": "2000-01-01T00:00:00"
-  },
+    "state": "W",
+    "token": {
+        "accessToken": "access_token",
+        "refreshToken": "refresh_token"
+    }
+}
+```
+
+### 로그아웃
+- **URL**: `/users/logout`
+- **Method**: POST
+- **Request Body**:
+```json
+{
+    "token": {
+        "accessToken": "access_token"
+    }
+}
+```
+
+### 토큰 재발급
+- **URL**: `/users/reissue`
+- **Method**: POST
+- **Request Body**:
+```json
+{
+    "token": {
+        "refreshToken": "refresh_token"
+    }
+}
+```
+
+## 2. 관리자 API
+
+### 사용자 승인
+- **URL**: `/admin/approve`
+- **Method**: PUT
+- **Request Body**:
+```json
+[
+    {
+        "uid": "user_uid",
+        "state": "U"
+    }
+]
+```
+
+### 사용자 목록 조회
+- **URL**: `/admin/getUsers`
+- **Method**: GET
+- **Response**:
+```json
+[
+    {
+        "uid": "user_uid",
+        "userId": "user123",
+        "name": "홍길동",
+        "nickname": "길동이",
+        "role": "USER",
+        "state": "W"
+    }
+]
+```
+
+## 3. 메뉴 API
+
+### 메뉴 생성
+- **URL**: `/menu/create`
+- **Method**: POST
+- **Request Body**:
+```json
+{
+    "name": "게시판",
+    "description": "게시판 메뉴",
+    "url": "/board",
+    "restricted": "USER,ADMIN",
+    "parentUID": null,
+    "menuOrder": 1
+}
+```
+
+### 메인 메뉴 조회
+- **URL**: `/menu/getMain`
+- **Method**: GET
+- **Response**:
+```json
+[
+    {
+        "uid": "menu_uid",
+        "name": "게시판",
+        "description": "게시판 메뉴",
+        "url": "/board",
+        "restricted": "USER,ADMIN"
+    }
+]
+```
+
+## 4. 설정 API
+
+### 설정 조회
+- **URL**: `/config/getConfig`
+- **Method**: GET
+- **Response**:
+```json
+{
+    "liveAccessToken": 1800000,
+    "liveRefreshToken": 604800000
+}
+```
+
+### 설정 생성
+- **URL**: `/config/create`
+- **Method**: POST
+- **Request Body**:
+```json
+{
+    "type": "TOKEN",
+    "configValue": "1800000",
+    "subType": "ACCESS",
+    "name": "Access Token 유효시간"
+}
+```
+
+### 설정 조회 (타입별)
+- **URL**: `/config/get/{type}/{subType}`
+- **Method**: GET
+- **Response**:
+```json
+[
+    {
+        "uid": "config_uid",
+        "type": "TOKEN",
+        "configValue": "1800000",
+        "subType": "ACCESS",
+        "name": "Access Token 유효시간"
+    }
+]
 ```
