@@ -28,9 +28,11 @@ public class UserEntity extends BaseEntity {
 
     private String nickname;
 
+    @Column(name="birth_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
+    @Column(name = "user_id")
     private String userId;
 
     private String password;
@@ -41,6 +43,7 @@ public class UserEntity extends BaseEntity {
 
     private boolean approved;
 
+    @Column(name = "approve_date")
     private LocalDateTime approveDate;
 
     public void approve() {

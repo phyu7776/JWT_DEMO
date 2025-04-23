@@ -3,10 +3,9 @@ package com.example.jwt.config.initializer;
 import com.example.jwt.config.constant.ObjectConstant;
 import com.example.jwt.service.config.ConfigEntity;
 import com.example.jwt.service.config.ConfigRepository;
-import com.example.jwt.service.config.ConfigService;
 import com.example.jwt.service.config.ConfigVO;
 import com.example.jwt.service.menu.MenuEntity;
-import com.example.jwt.service.menu.MenuRepository;
+import com.example.jwt.service.menu.repository.MenuRepository;
 import com.example.jwt.service.menu.MenuVO;
 import com.example.jwt.service.user.UserEntity;
 import com.example.jwt.service.user.UserRepository;
@@ -95,7 +94,10 @@ public class Initializer {
 
         for (MenuVO defaultMenu : defaultMenus) {
             if ("시스템 설정".equals(defaultMenu.getName())) {
-                initMenus.add(new InitMenu("유저 관리", "/manage-user", UserVO.ROLE.ADMIN.getRole(), defaultMenu.getUID(), 0));
+                initMenus.add(new InitMenu("유저 관리", "/manage-user"
+                        , UserVO.ROLE.ADMIN.getRole() + "," + UserVO.ROLE.SUPERVISOR.getRole()
+                        , defaultMenu.getUid(), 0));
+                initMenus.add(new InitMenu("메뉴 관리", "/manage-menu", UserVO.ROLE.ADMIN.getRole(), defaultMenu.getUid(), 0));
             }
         }
 
@@ -120,14 +122,17 @@ public class Initializer {
         };
 
         for (ConfigVO config : configVOs) {
-            ConfigEntity entity = ConfigEntity.builder()
-                    .type(config.getType())
-                    .subType(config.getSubType())
-                    .name(config.getName())
-                    .configValue(config.getConfigValue())
-                    .build();
+            if (!configRepository.existsByTypeAndSubTypeAndConfigValue(config.getType(), config.getSubType(), config.getConfigValue())) {
+                ConfigEntity entity = ConfigEntity.builder()
+                        .type(config.getType())
+                        .subType(config.getSubType())
+                        .name(config.getName())
+                        .configValue(config.getConfigValue())
+                        .build();
 
-            configRepository.save(entity);
+                configRepository.save(entity);
+            }
         }
     }
 }
+

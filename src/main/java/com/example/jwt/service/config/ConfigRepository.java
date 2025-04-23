@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ConfigRepository extends JpaRepository<ConfigEntity, String> {
 
+    boolean existsByTypeAndSubTypeAndConfigValue(String type, String subType, String configValue);
+
     List<ConfigEntity> getConfigEntitiesByTypeAndSubType(String type, String subType);
 
     List<ConfigEntity> getConfigEntitiesByType(String type);

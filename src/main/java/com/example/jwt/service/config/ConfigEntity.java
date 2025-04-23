@@ -22,8 +22,13 @@ import lombok.NoArgsConstructor;
 public class ConfigEntity extends BaseEntity {
 
     private String type;
+
+    @Column(name="config_value")
     private String configValue;
+
+    @Column(name="sub_type")
     private String subType;
+
     private String name;
 
     @Override

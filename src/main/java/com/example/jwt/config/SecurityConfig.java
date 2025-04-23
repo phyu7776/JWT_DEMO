@@ -33,7 +33,6 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers("/config/getConfig").permitAll()
                                 .requestMatchers("/users/**").permitAll()
-                                .requestMatchers("/h2-console/**").permitAll() //TODO H2 CONSOLE 허용
                                 .anyRequest().authenticated()
                 )
                 

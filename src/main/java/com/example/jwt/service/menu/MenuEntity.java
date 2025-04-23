@@ -2,9 +2,7 @@ package com.example.jwt.service.menu;
 
 import com.example.jwt.config.base.BaseEntity;
 import com.example.jwt.config.constant.EntitiyConstant;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,8 +31,10 @@ public class MenuEntity extends BaseEntity {
 
     private String restricted;
 
+    @Column(name = "parent_uid")
     private String parentUID;
 
+    @Column(name = "menu_order")
     private int menuOrder;
 
     @Override

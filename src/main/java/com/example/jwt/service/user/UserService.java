@@ -9,7 +9,7 @@ public interface UserService {
 
     void signup(UserVO user);
 
-    List<UserVO> getAllUsers();
+    Map<String, Object> getAllUsers();
 
     UserVO userReissue(UserVO user);
 

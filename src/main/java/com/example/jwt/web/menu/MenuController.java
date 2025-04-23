@@ -31,4 +31,9 @@ public class MenuController {
     public ResponseEntity<List<MenuVO>> get(@PathVariable String uid) {
         return ResponseEntity.ok(menuService.get(uid));
     }
+
+    @GetMapping("/getFullMenuTree")
+    public ResponseEntity<List<MenuVO>> getFullMenuTree() {
+        return ResponseEntity.ok(menuService.getFullMenuTree());
+    }
 }

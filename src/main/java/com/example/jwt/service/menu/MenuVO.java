@@ -1,17 +1,18 @@
 package com.example.jwt.service.menu;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class MenuVO {
 
-    private String UID;
+    private String uid;
 
     private String name;
 
@@ -23,17 +24,21 @@ public class MenuVO {
 
     private String restricted;
 
-    private String parentUID;
+    private String parentUid;
+
+    private boolean hasChildren;
+
+    private List<MenuVO> children = new ArrayList<>(); //재귀 트리용 필드
 
     public static MenuVO toMenuVO(MenuEntity entity) {
         return MenuVO.builder()
-                .UID(entity.getUID())
+                .uid(entity.getUID())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .icon(entity.getIcon())
                 .url(entity.getUrl())
                 .restricted(entity.getRestricted())
-                .parentUID(entity.getParentUID())
+                .parentUid(entity.getParentUID())
                 .build();
     }
 }

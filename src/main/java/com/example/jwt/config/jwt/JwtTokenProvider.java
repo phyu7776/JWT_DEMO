@@ -9,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -18,6 +19,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -98,8 +100,14 @@ public class JwtTokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 
             // 토큰이 accessToken 인지 refreshToken 인지 구분
-            Map<Object, Object> entries = lettuceUtil.getHashMap(token);
-            if (!entries.isEmpty()) {
+            Map<Object, Object> entries = null;
+            try {
+                entries = lettuceUtil.getHashMap(token);
+            } catch (Exception e) {
+                log.error("Invalid token");
+            }
+
+            if (!ObjectUtils.isEmpty(entries)) {
                 // accessToken
                 UserVO user = lettuceUtil.getUser(token);
 

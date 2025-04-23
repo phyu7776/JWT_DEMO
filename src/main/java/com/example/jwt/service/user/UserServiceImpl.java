@@ -63,10 +63,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserVO> getAllUsers() {
+    public Map<String, Object> getAllUsers() {
         List<UserEntity> userList = userRepository.findAllByOrderByCreatedAtDesc();
 
-        return userList.stream().map(UserVO::toUserVO).toList();
+        List<UserVO> users = userList.stream().map(UserVO::toUserVO).toList();
+
+        return Map.of(
+                "users", users,
+                "totalCount", users.size()
+        );
     }
 
     @Override
