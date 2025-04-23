@@ -54,9 +54,11 @@ src/main/java/com/example/jwt/
 - Spring Security
 - Spring Data JPA
 - Spring Data Redis
-- H2 Database
-- JWT (jjwt)
+- QueryDSL 5.1.0
+- MariaDB 3.3.3
+- JWT
 - Lombok
+- Spring Boot DevTools
 
 ## 실행 방법
 
@@ -71,12 +73,6 @@ export ADMIN_PASSWORD=admin123
 ./gradlew build
 ./gradlew bootRun
 ```
-
-3. H2 Console 접속
-- URL: http://localhost:8080/h2-console
-- JDBC URL: jdbc:h2:mem:testdb
-- Username: sa
-- Password: (비어있음)
 
 ## 보안 설정
 

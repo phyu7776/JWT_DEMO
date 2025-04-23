@@ -66,6 +66,44 @@
 }
 ```
 
+### 사용자 정보 수정
+- **URL**: `/users/update`
+- **Method**: PATCH
+- **Request Body**:
+```json
+{
+    "uid": "user_uid",
+    "name": "홍길동",
+    "nickname": "길동이",
+    "birthday": "1990-01-01",
+    "role": "USER",
+    "state": "U"
+}
+```
+
+### 비밀번호 변경
+- **URL**: `/users/changePassword`
+- **Method**: PATCH
+- **Request Body**:
+```json
+{
+    "oldPassword": "old123",
+    "newPassword": "new123"
+}
+```
+
+### 사용자 삭제
+- **URL**: `/users/delete`
+- **Method**: DELETE
+- **Request Body**:
+```json
+[
+    {
+        "uid": "user_uid"
+    }
+]
+```
+
 ## 2. 관리자 API
 
 ### 사용자 승인
@@ -86,16 +124,19 @@
 - **Method**: GET
 - **Response**:
 ```json
-[
-    {
-        "uid": "user_uid",
-        "userId": "user123",
-        "name": "홍길동",
-        "nickname": "길동이",
-        "role": "USER",
-        "state": "W"
-    }
-]
+{
+    "totalCount": 10,
+    "users": [
+        {
+            "uid": "user_uid",
+            "userId": "user123",
+            "name": "홍길동",
+            "nickname": "길동이",
+            "role": "USER",
+            "state": "W"
+        }
+    ]
+}
 ```
 
 ## 3. 메뉴 API
@@ -127,6 +168,47 @@
         "description": "게시판 메뉴",
         "url": "/board",
         "restricted": "USER,ADMIN"
+    }
+]
+```
+
+### 하위 메뉴 조회
+- **URL**: `/menu/get/{uid}`
+- **Method**: GET
+- **Response**:
+```json
+[
+    {
+        "uid": "menu_uid",
+        "name": "게시판",
+        "description": "게시판 메뉴",
+        "url": "/board",
+        "restricted": "USER,ADMIN"
+    }
+]
+```
+
+### 전체 메뉴 트리 조회
+- **URL**: `/menu/getFullMenuTree`
+- **Method**: GET
+- **Response**:
+```json
+[
+    {
+        "uid": "menu_uid",
+        "name": "게시판",
+        "description": "게시판 메뉴",
+        "url": "/board",
+        "restricted": "USER,ADMIN",
+        "children": [
+            {
+                "uid": "submenu_uid",
+                "name": "공지사항",
+                "description": "공지사항 메뉴",
+                "url": "/board/notice",
+                "restricted": "USER,ADMIN"
+            }
+        ]
     }
 ]
 ```
