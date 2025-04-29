@@ -13,7 +13,6 @@ CREATE TABLE IF NOT EXISTS menus (
 CREATE INDEX IF NOT EXISTS idx_menus_search ON menus (name, created_at);
 CREATE INDEX IF NOT EXISTS idx_menus_parent ON menus (parent_uid);
 
-
 CREATE TABLE IF NOT EXISTS users (
     uid VARCHAR(64) PRIMARY KEY,
     name VARCHAR(100),
@@ -44,3 +43,18 @@ CREATE TABLE IF NOT EXISTS config (
 CREATE INDEX IF NOT EXISTS idx_config_search ON config (
     type, sub_type
 );
+
+CREATE TABLE IF NOT EXISTS board (
+     uid VARCHAR(64) PRIMARY KEY,
+    name VARCHAR(100),
+    full_path_index VARCHAR(64),
+    content TEXT,
+    good INT,
+    is_notice BOOLEAN DEFAULT FALSE,
+    creator_uid VARCHAR(64),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_uid VARCHAR(64),
+    last_modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE INDEX IF NOT EXISTS idx_board_search ON menus (name, created_at);
