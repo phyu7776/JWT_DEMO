@@ -15,13 +15,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class BoardVO {
 
-    String UID;
-    String name;
-    String creatorUID;
-    String creatorName;
-    String content;
-    int good;
-    boolean isNotice;
+    private String UID;
+    private String name;
+    private String creatorUID;
+    private String creatorName;
+    private String content;
+    private int good;
+    private boolean isNotice;
     private LocalDate createdAt;
 
     public static BoardVO toBoardVO(BoardEntity entity) {

@@ -28,7 +28,7 @@ public class BoardServiceImpl implements BoardService{
                         .creatorUID(SecurityUtil.getCurrentUser().getUID())
                         .content(board.getContent())
                         .good(0)
-                        .isNotice(board.isNotice)
+                        .isNotice(board.isNotice())
                 .build());
     }
 
@@ -67,7 +67,7 @@ public class BoardServiceImpl implements BoardService{
         boardEntity.setUID(board.getUID());
         boardEntity.setName(board.getName());
         boardEntity.setContent(board.getContent());
-        boardEntity.setNotice(board.isNotice);
+        boardEntity.setNotice(board.isNotice());
         boardEntity.setModifiedUID(SecurityUtil.getCurrentUser().getUID());
         boardEntity.setLastModifiedAt(LocalDateTime.now());
 

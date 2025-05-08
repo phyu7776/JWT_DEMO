@@ -11,10 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ConfigVO {
 
-    String type;
-    String configValue;
-    String name;
-    String subType;
+    private String type;
+    private String configValue;
+    private String name;
+    private String subType;
 
     public static ConfigVO toConfigVO(ConfigEntity entity) {
         return ConfigVO.builder()

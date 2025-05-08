@@ -9,7 +9,8 @@ public enum EntitiyConstant {
     USER_ENTITY("userEntity"),
     MENU_ENTITY("menuEntity"),
     CONFIG_ENTITY("configEntity"),
-    BOARD_ENTITY("boardEntity")
+    BOARD_ENTITY("boardEntity"),
+    GEO_ENTITY("geoEntity")
     ;
 
     public final String value;

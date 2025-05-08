@@ -19,30 +19,30 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BoardEntity extends BaseEntity {
 
-    String name;
+    private String name;
 
     @Column(name = "creator_uid")
-    String creatorUID;
+    private String creatorUID;
 
     @Column(name = "full_path_index")
-    String fullPathIndex;
+    private String fullPathIndex;
 
     @ManyToOne(fetch = FetchType.LAZY) // ✅ 연관관계 매핑
     @JoinColumn(name = "creator_uid", referencedColumnName = "uid", insertable = false, updatable = false)
     private UserEntity creator; // ✅ creator_uid 로 연결된 UserEntity
 
-    int good;
+    private int good;
 
-    String content;
+    private String content;
 
     @Column(name = "is_notice")
-    boolean isNotice;
+    private boolean isNotice;
 
     @Column(name = "modified_uid")
-    String modifiedUID;
+    private String modifiedUID;
 
     @Column(name = "last_modified_at")
-    LocalDateTime lastModifiedAt;
+    private LocalDateTime lastModifiedAt;
 
     @Override
     public String getEntityType() {

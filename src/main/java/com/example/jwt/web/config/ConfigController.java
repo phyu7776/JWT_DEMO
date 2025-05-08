@@ -1,6 +1,5 @@
 package com.example.jwt.web.config;
 
-import com.example.jwt.config.constant.ObjectConstant;
 import com.example.jwt.config.jwt.JwtTokenProvider;
 import com.example.jwt.service.config.ConfigRepository;
 import com.example.jwt.service.config.ConfigService;
@@ -18,7 +17,6 @@ import java.util.Map;
 public class ConfigController {
 
     private final ConfigService configService;
-    private final ConfigRepository configRepository;
 
     @PostMapping("/create")
     public ResponseEntity<ConfigVO> createConfig(@RequestBody ConfigVO config) {

@@ -45,7 +45,7 @@ CREATE INDEX IF NOT EXISTS idx_config_search ON config (
 );
 
 CREATE TABLE IF NOT EXISTS board (
-     uid VARCHAR(64) PRIMARY KEY,
+    uid VARCHAR(64) PRIMARY KEY,
     name VARCHAR(100),
     full_path_index VARCHAR(64),
     content TEXT,
@@ -57,4 +57,18 @@ CREATE TABLE IF NOT EXISTS board (
     last_modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-CREATE INDEX IF NOT EXISTS idx_board_search ON menus (name, created_at);
+CREATE INDEX IF NOT EXISTS idx_board_search ON board (name, created_at);
+
+CREATE TABLE IF NOT EXISTS geo (
+    uid VARCHAR(64) PRIMARY KEY,
+    country_name VARCHAR(100),
+    country_code VARCHAR(100),
+    notes TEXT,
+    longitude VARCHAR(100),
+    latitude VARCHAR(100),
+    creator_uid VARCHAR(64),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE INDEX IF NOT EXISTS idx_geo_search ON geo (country_name, creator_uid, created_at);
+
