@@ -96,37 +96,34 @@ public class JwtTokenProvider {
 
     // 토큰 검증
     public boolean validateToken(String token) {
+
+        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+
+        // 토큰이 accessToken 인지 refreshToken 인지 구분
+        Map<Object, Object> entries = null;
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-
-            // 토큰이 accessToken 인지 refreshToken 인지 구분
-            Map<Object, Object> entries = null;
-            try {
-                entries = lettuceUtil.getHashMap(token);
-            } catch (Exception e) {
-                log.error("Invalid token");
-            }
-
-            if (!ObjectUtils.isEmpty(entries)) {
-                // accessToken
-                UserVO user = lettuceUtil.getUser(token);
-
-                if (ObjectUtils.isEmpty(user.getUID())) {
-                    throw new JwtException("Invalid token");
-                }
-            } else {
-                // refreshToken
-                Object checkToken = lettuceUtil.getRefreshToken(token);
-
-                if (ObjectUtils.isEmpty(checkToken) || "BLOCK_TOKEN".equals(checkToken.toString())) {
-                    throw new JwtException("Invalid token");
-                }
-            }
-
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
+            entries = lettuceUtil.getHashMap(token);
+        } catch (Exception e) {
+            log.error("Invalid token");
         }
+
+        if (!ObjectUtils.isEmpty(entries)) {
+            // accessToken
+            UserVO user = lettuceUtil.getUser(token);
+
+            if (ObjectUtils.isEmpty(user.getUID())) {
+                throw new JwtException("Invalid token");
+            }
+        } else {
+            // refreshToken
+            Object checkToken = lettuceUtil.getRefreshToken(token);
+
+            if (ObjectUtils.isEmpty(checkToken) || "BLOCK_TOKEN".equals(checkToken.toString())) {
+                throw new JwtException("Invalid token");
+            }
+        }
+
+        return true;
     }
 
 

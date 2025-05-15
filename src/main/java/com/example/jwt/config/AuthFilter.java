@@ -3,6 +3,7 @@ package com.example.jwt.config;
 import com.example.jwt.config.jwt.JwtAuthentication;
 import com.example.jwt.config.jwt.JwtTokenProvider;
 import com.example.jwt.utils.LettuceUtil;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,20 +33,26 @@ public class AuthFilter extends OncePerRequestFilter {
 
         String token = jwtTokenProvider.getToken(request);
 
-        if (!ObjectUtils.isEmpty(token) && jwtTokenProvider.validateToken(token)) {
+        try {
+            if (!ObjectUtils.isEmpty(token) && jwtTokenProvider.validateToken(token)) {
 
-            JwtAuthentication authentication = new JwtAuthentication(
-                    lettuceUtil.getUser(token)
-                    , jwtTokenProvider.getUserId(token)
-                    , null
-                    , List.of(new SimpleGrantedAuthority("ROLE_" + jwtTokenProvider.getRole(token))));
+                JwtAuthentication authentication = new JwtAuthentication(
+                        lettuceUtil.getUser(token)
+                        , jwtTokenProvider.getUserId(token)
+                        , null
+                        , List.of(new SimpleGrantedAuthority("ROLE_" + jwtTokenProvider.getRole(token))));
 
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            }
+
+            filterChain.doFilter(request, response);
+        } catch (JwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(e.getMessage());
         }
-
-        filterChain.doFilter(request, response);
     }
 }
